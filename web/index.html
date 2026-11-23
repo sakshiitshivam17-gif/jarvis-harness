@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#04070f">
+<title>J.A.R.V.I.S. — Personal Harness</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='none' stroke='%2328b8ff' stroke-width='2'/%3E%3Ccircle cx='32' cy='32' r='14' fill='none' stroke='%23ff2d4b' stroke-width='2'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23dff7ff'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/orbitron-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/rajdhani-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=19">
+</head>
+<body>
+<div id="starfield" aria-hidden="true"></div>
+<div class="grid-floor" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<div id="boot" class="boot">
+  <div class="boot-corners"><i></i><i></i><i></i><i></i></div>
+  <div class="boot-center">
+    <div class="boot-reactor" aria-hidden="true">
+      <div class="boot-ring r1"></div>
+      <div class="boot-ring r2"></div>
+      <div class="boot-ring r3"></div>
+      <div class="boot-core"></div>
+    </div>
+    <h1 class="boot-title">J.A.R.V.I.S.</h1>
+    <p class="boot-sub">JUST A RATHER VERY INTELLIGENT SYSTEM</p>
+    <div class="boot-progress" aria-hidden="true"><i></i></div>
+    <div class="boot-log" id="boot-log" aria-live="polite"></div>
+    <button id="engage" class="engage" hidden>
+      <span class="engage-ring"></span>
+      <span>ENGAGE VOICE LINK</span>
+    </button>
+    <p class="boot-note" id="boot-note" hidden>Microphone access + Chrome speech service required</p>
+  </div>
+  <div class="boot-meta"><span>STARK INDUSTRIES // HARNESS DIVISION</span><span>MK II</span></div>
+</div>
+
+<div id="app" class="app is-locked" aria-hidden="true">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19"/><circle cx="22" cy="22" r="12"/><path d="M22 3v8M22 33v8M3 22h8M33 22h8"/><circle cx="22" cy="22" r="3.5" class="fill"/></svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-name">J.A.R.V.I.S.</div>
+        <div class="brand-sub">PERSONAL COMPUTER HARNESS <b>/</b> MK II</div>
+      </div>
+    </div>
+    <div class="top-status">
+      <div class="status-chip" id="neural-chip"><i class="led"></i><span>NEURAL CORE</span><em>CHECK</em></div>
+      <div class="status-chip" id="tts-chip"><i class="led"></i><span>VOICE SYNTH</span><em>CHECK</em></div>
+      <div class="status-chip" id="vision-chip"><i class="led"></i><span>SCREEN VISION</span><em>OCR</em></div>
+      <div class="status-chip live" id="link-chip"><i class="led"></i><span>VOICE LINK</span><em id="link-chip-state">STANDBY</em></div>
+      <button class="listen-btn" id="listen-btn" aria-pressed="true"><i></i><span id="listen-label">LISTENING</span></button>
+    </div>
+    <div class="clock-block">
+      <div class="clock" id="clock">--:--:--</div>
+      <div class="date-line" id="date">—</div>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <section class="panel reactor-panel">
+      <div class="panel-head">
+        <span class="eyebrow">ARC REACTOR</span>
+        <span class="micro" id="reactor-code">MK-II // 0.98</span>
+      </div>
+
+      <div class="reactor-stage">
+        <div class="reactor" id="reactor" aria-hidden="true">
+          <div class="reactor-aura"></div>
+          <svg class="reactor-svg" viewBox="0 0 400 400">
+            <defs>
+              <linearGradient id="blueGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#7fe6ff"/><stop offset=".5" stop-color="#28b8ff"/><stop offset="1" stop-color="#0a5fb0"/>
+              </linearGradient>
+              <linearGradient id="redGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ff8094"/><stop offset="1" stop-color="#ff1f42"/>
+              </linearGradient>
+              <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <g class="spin-slow" opacity=".55">
+              <circle cx="200" cy="200" r="176" fill="none" stroke="url(#blueGrad)" stroke-width="1" stroke-dasharray="2 10"/>
+              <circle cx="200" cy="200" r="164" fill="none" stroke="url(#redGrad)" stroke-width="1.4" stroke-dasharray="70 250" filter="url(#glow)"/>
+            </g>
+            <g class="spin-rev" opacity=".8">
+              <circle cx="200" cy="200" r="146" fill="none" stroke="#1d86c6" stroke-width="1" stroke-dasharray="40 6 4 6"/>
+              <path d="M200 54a146 146 0 0 1 103 43" fill="none" stroke="url(#redGrad)" stroke-width="2.4" filter="url(#glow)"/>
+            </g>
+            <g class="spin-slow2">
+              <circle cx="200" cy="200" r="126" fill="none" stroke="#2cbcff" stroke-width=".8" stroke-dasharray="1 5" opacity=".7"/>
+              <circle cx="200" cy="200" r="112" fill="none" stroke="#0c6cae" stroke-width="7" stroke-dasharray="1 12" opacity=".55"/>
+            </g>
+            <g class="reactor-pulse">
+              <circle cx="200" cy="200" r="92" fill="none" stroke="url(#blueGrad)" stroke-width="1.6" opacity=".8"/>
+              <circle cx="200" cy="200" r="78" fill="none" stroke="url(#redGrad)" stroke-width="1" stroke-dasharray="26 12" opacity=".75"/>
+            </g>
+            <g class="ticks" id="ticks"></g>
+          </svg>
+          <div class="reactor-core">
+            <div class="core-halo"></div>
+            <div class="core-disc"><span>J</span></div>
+            <div class="core-ring"></div>
+          </div>
+          <div class="orbit"><i></i></div>
+        </div>
+        <div class="reactor-readout"><span id="core-load">CORE 04%</span><span id="core-temp">TEMP —</span></div>
+      </div>
+
+      <div class="voice-state" id="voice-state">
+        <i class="state-led"></i>
+        <span id="state-text">STANDBY</span>
+        <span class="state-wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      </div>
+
+      <canvas id="waveform" class="waveform" aria-hidden="true"></canvas>
+
+      <div class="input-meter">
+        <span>MIC</span>
+        <div class="meter-track"><i id="meter-fill"></i></div>
+        <span id="meter-db">--</span>
+      </div>
+
+      <div class="hint-label">QUICK COMMAND BUFFER</div>
+      <div class="chips" id="chips">
+        <button class="chip" data-cmd="system status"><span>01</span> system status</button>
+        <button class="chip" data-cmd="open chrome"><span>02</span> open chrome</button>
+        <button class="chip" data-cmd="what's my cpu usage"><span>03</span> cpu telemetry</button>
+        <button class="chip" data-cmd="set a timer for 5 minutes"><span>04</span> five minute timer</button>
+      </div>
+      <p class="voice-note">Say <b>“Jarvis”</b> then your order. Voice link sleeps after <span id="awake-window">45</span>s of silence.</p>
+    </section>
+
+    <section class="panel feed-panel">
+      <div class="panel-head">
+        <div class="head-group"><span class="eyebrow">LIVE TRANSCRIPT</span><span class="micro" id="feed-count">00 ENTRIES</span></div>
+        <div class="head-actions">
+          <button class="icon-btn" id="screen-btn" title="Read my screen">▣</button>
+          <button class="icon-btn" id="help-btn" title="Command matrix">?</button>
+          <button class="icon-btn" id="clear-btn" title="Clear transcript">⌫</button>
+        </div>
+      </div>
+      <div class="feed" id="feed" aria-live="polite" aria-relevant="additions">
+        <div class="boot-line" id="boot-line">Establishing secure channel…</div>
+      </div>
+      <div class="agent-bar" id="agent-bar" hidden>
+        <div class="agent-head">
+          <span class="agent-title"><i class="agent-dot"></i> AGENT RUNNING</span>
+          <span class="agent-step" id="agent-step">STEP 0</span>
+          <button class="agent-stop" id="agent-stop">STOP</button>
+        </div>
+        <div class="agent-task" id="agent-task">—</div>
+        <ol class="agent-trace" id="agent-trace"></ol>
+      </div>
+
+      <div class="interim" id="interim">
+        <span class="interim-label">HEARD</span>
+        <span class="interim-text" id="interim-text">Awaiting voice input…</span>
+        <span class="cursor" aria-hidden="true">▌</span>
+      </div>
+      <div class="feed-foot">
+        <span>CHANNEL 01 // ENCRYPTED</span>
+        <span id="latency">RTT —</span>
+        <span class="signal" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
+    </section>
+
+    <aside class="right-stack">
+      <section class="panel telemetry-panel">
+        <div class="panel-head">
+          <span class="eyebrow">CORE TELEMETRY</span>
+          <span class="micro live-micro"><i class="led"></i> LIVE</span>
+        </div>
+        <div class="metric" data-metric="cpu">
+          <div class="metric-top"><span>CPU LOAD</span><b id="v-cpu">—</b></div>
+          <div class="metric-bar"><i id="bar-cpu"></i></div>
+          <svg class="spark" viewBox="0 0 100 24" preserveAspectRatio="none"><polyline id="spark-cpu"/></svg>
+        </div>
+        <div class="metric" data-metric="mem">
+          <div class="metric-top"><span>MEMORY</span><b id="v-mem">—</b></div>
+          <div class="metric-bar red"><i id="bar-mem"></i></div>
+          <div class="metric-sub" id="sub-mem">—</div>
+        </div>
+        <div class="metric" data-metric="net">
+          <div class="metric-top"><span>NETWORK</span><b id="v-net">—</b></div>
+          <div class="net-split"><span class="down" id="v-down">↓ —</span><span class="up" id="v-up">↑ —</span></div>
+          <svg class="spark" viewBox="0 0 100 24" preserveAspectRatio="none"><polyline id="spark-net"/></svg>
+        </div>
+        <div class="metric" data-metric="temp">
+          <div class="metric-top"><span>THERMAL</span><b id="v-temp">—</b></div>
+          <div class="metric-bar red"><i id="bar-temp"></i></div>
+        </div>
+        <div class="metric" data-metric="power">
+          <div class="metric-top"><span>POWER CELL</span><b id="v-batt">—</b></div>
+          <div class="metric-bar"><i id="bar-batt"></i></div>
+          <div class="metric-sub" id="sub-batt">—</div>
+        </div>
+        <div class="metric" data-metric="audio">
+          <div class="metric-top"><span>AUDIO OUT</span><b id="v-vol">—</b></div>
+          <div class="metric-bar"><i id="bar-vol"></i></div>
+          <div class="metric-sub" id="sub-vol">—</div>
+        </div>
+        <div class="telemetry-foot"><span id="v-host">—</span><span id="v-uptime">UP —</span></div>
+      </section>
+
+      <section class="panel log-panel">
+        <div class="panel-head"><span class="eyebrow">SYSTEM LOG</span><span class="micro">TAIL -F</span></div>
+        <div class="log-list" id="log-list" aria-live="off"></div>
+        <div class="log-foot"><span class="dot"></span> STREAM ACTIVE</div>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-link"><i class="dot"></i><span>VOICE LINK</span><b id="footer-state">STANDBY</b></div>
+    <button class="footer-stop" id="footer-stop" aria-pressed="true">■ <span id="footer-stop-label">STOP LISTENING</span></button>
+    <form class="manual" id="manual-form">
+      <button type="button" class="manual-toggle" id="manual-toggle">⌨ <span>MANUAL OVERRIDE</span></button>
+      <div class="manual-field" id="manual-field" hidden>
+        <span class="prompt">›</span>
+        <input id="manual-input" autocomplete="off" spellcheck="false" placeholder="Type an order and press enter…" aria-label="Manual command">
+        <button type="submit">EXECUTE</button>
+      </div>
+    </form>
+    <div class="footer-right">
+      <span class="footer-heard" id="footer-heard">AWAITING WAKE WORD</span>
+      <span class="footer-hint">SAY <b>“JARVIS”</b></span>
+    </div>
+  </footer>
+</div>
+
+<div class="modal" id="help-modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="panel-head"><span class="eyebrow">COMMAND MATRIX</span><button class="icon-btn" data-close>✕</button></div>
+    <div class="help-body" id="help-body"></div>
+    <p class="modal-note">Everything here is voice-addressable. Prefix with “Jarvis”.</p>
+  </div>
+</div>
+
+<div class="toast-stack" id="toasts" aria-live="assertive"></div>
+<audio id="tts-audio" preload="auto"></audio>
+
+<script src="js/app.js?v=21"></script>
+</body>
+</html>
